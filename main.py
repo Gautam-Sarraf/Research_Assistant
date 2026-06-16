@@ -9,7 +9,10 @@ import os
 import json
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(
+    api_key=os.getenv("GEMINI_API_KEY"),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -38,18 +41,39 @@ class ResearchRequest(BaseModel):
 
 
 def stream_research(topic: str):
-    stream = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": topic}
-        ],
-        stream=True
-    )
-    for chunk in stream:
-        delta = chunk.choices[0].delta.content
-        if delta:
-            yield f"data: {json.dumps({'content': delta})}\n\n"
+    # Try the primary model: Gemini 2.5 Flash Lite
+    try:
+        stream = client.chat.completions.create(
+            model="gemini-2.5-flash-lite",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": topic}
+            ],
+            stream=True
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content
+            if delta:
+                yield f"data: {json.dumps({'content': delta})}\n\n"
+    except Exception as e:
+        # Fallback if primary is rate-limited or fails
+        print(f"Primary model (gemini-2.5-flash-lite) failed: {e}. Falling back to gemma-4-31b...")
+        try:
+            stream = client.chat.completions.create(
+                model="gemma-4-31b",
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": topic}
+                ],
+                stream=True
+            )
+            for chunk in stream:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    yield f"data: {json.dumps({'content': delta})}\n\n"
+        except Exception as fallback_err:
+            print(f"Fallback model (gemma-4-31b) failed: {fallback_err}")
+            yield f"data: {json.dumps({'content': f'Error generating research: {fallback_err}'})}\n\n"
     yield "data: [DONE]\n\n"
 
 

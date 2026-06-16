@@ -749,6 +749,96 @@
           text-align: center;
         }
       }
+
+      /* Mobile Menu Toggle & Overlay */
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-dark);
+        cursor: pointer;
+        z-index: 150;
+      }
+
+      .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: #ffffff;
+        border-left: 3px solid var(--border-color);
+        z-index: 200;
+        transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        padding: 80px 32px;
+        box-shadow: -10px 0 0 rgba(0, 0, 0, 0.05);
+      }
+
+      .mobile-menu-overlay.active {
+        right: 0;
+      }
+
+      .close-menu {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-size: 2rem;
+        background: none;
+        border: none;
+        color: var(--text-dark);
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      .mobile-menu-links {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .mobile-menu-links a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 1.25rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .nav-btn-mobile {
+        background: var(--bg-hero);
+        border: 2px solid var(--border-color);
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 4px 4px 0 var(--border-color);
+        display: inline-block;
+        margin-top: 12px;
+      }
+
+      @media (max-width: 768px) {
+        .nav-center, .nav-right {
+          display: none;
+        }
+        .menu-toggle {
+          display: block;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-panel {
+          padding: 16px;
+        }
+        .device-mockup {
+          border-width: 8px;
+          border-radius: 16px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -770,7 +860,27 @@
       <div class="nav-right">
         <button class="nav-btn" onclick="scrollToApp()">Get Started ↗</button>
       </div>
+
+      <!-- Hamburger Menu (visible on mobile only) -->
+      <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </nav>
+
+    <!-- Mobile Menu Drawer Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu">
+      <button class="close-menu" onclick="toggleMenu()">&times;</button>
+      <div class="mobile-menu-links">
+        <a href="/how-we-roll" onclick="toggleMenu()">How we Roll</a>
+        <a href="/services" onclick="toggleMenu()">Our Services</a>
+        <a href="/community" onclick="toggleMenu()">Our Community</a>
+        <a href="/" class="nav-btn-mobile" onclick="toggleMenu()">Get Started ↗</a>
+      </div>
+    </div>
 
     <!-- Hero Header -->
     <section class="hero">
@@ -938,6 +1048,11 @@
 
     <script>
       let rawText = "";
+
+      function toggleMenu() {
+        const menu = document.getElementById("mobile-menu");
+        menu.classList.toggle("active");
+      }
 
       function scrollToApp() {
         document.getElementById("app-container").scrollIntoView({ behavior: 'smooth' });
