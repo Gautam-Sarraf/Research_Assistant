@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Research Assistant — Herb Agency</title>
+    <meta name="description" content="Instantly compile thorough, expert-crafted, results-driven research summaries on any topic." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Brand Color System */
+      :root {
+        --bg-hero: #bdf492; /* The vibrant pastel-lime green */
+        --bg-dark: #0c1e12;  /* Deep dark forest green/black */
+        --bg-panel: #ffffff;
+        --bg-screen: #f8f7f3; /* Warm off-white screen bg */
+        --text-dark: #0c1e12;
+        --text-muted: #5e6b60;
+        --border-color: #0c1e12;
+        --accent-green: #2e7d32;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-hero);
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 80px;
+        position: relative;
+      }
+
+      /* Navigation Header */
+      .top-nav {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 20px;
+        z-index: 100;
+      }
+
+      .nav-left .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .logo-box {
+        background: var(--text-dark);
+        color: var(--bg-hero);
+        font-weight: 800;
+        font-size: 1.1rem;
+        padding: 6px 12px;
+        border-radius: 6px;
+        letter-spacing: -0.02em;
+      }
+
+      .logo-text {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+        color: var(--text-dark);
+      }
+
+      .nav-center {
+        display: flex;
+        gap: 32px;
+      }
+
+      .nav-center a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: opacity 0.2s ease;
+      }
+
+      .nav-center a:hover {
+        opacity: 0.75;
+      }
+
+      .nav-right .nav-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 2px 2px 0 var(--border-color);
+      }
+
+      .nav-right .nav-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 3px 3px 0 var(--border-color);
+      }
+
+      /* Hero Section */
+      .hero {
+        width: 100%;
+        max-width: 1100px;
+        text-align: center;
+        padding: 40px 20px 0 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .hero-title {
+        font-size: 3.6rem;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        max-width: 900px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+
+      .badge-word {
+        background: #ffffff;
+        color: var(--text-dark);
+        padding: 4px 16px;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        display: inline-block;
+        box-shadow: 4px 4px 0 var(--border-color);
+        margin: 0 4px;
+        transform: rotate(-0.5deg);
+      }
+
+      .badge-word:nth-child(even) {
+        transform: rotate(0.5deg);
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        line-height: 1.6;
+        margin-bottom: 60px;
+        font-weight: 500;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .btn-primary {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transition: all 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0 var(--border-color);
+      }
+
+      .btn-secondary {
+        background: var(--text-dark);
+        color: #ffffff;
+        border: 2px solid var(--border-color);
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+        transition: all 0.2s ease;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
+        background: #142e1b;
+      }
+
+      /* Diagonal Wave Split Background */
+      .bottom-split {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 45%;
+        background-color: var(--bg-dark);
+        z-index: 1;
+        clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      }
+
+      /* Tablet/Laptop Device Mockup */
+      .device-mockup {
+        width: 100%;
+        max-width: 960px;
+        background: #000000;
+        border: 14px solid #1c1c1c;
+        border-radius: 32px;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.45);
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .device-header {
+        background: #1c1c1c;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #2a2a2a;
+      }
+
+      .window-dots {
+        display: flex;
+        gap: 6px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .dot.red { background: #ff5f56; }
+      .dot.yellow { background: #ffbd2e; }
+      .dot.green { background: #27c93f; }
+
+      .address-bar {
+        background: #2a2a2a;
+        color: #888;
+        font-size: 0.75rem;
+        padding: 4px 40px;
+        border-radius: 6px;
+        font-family: monospace;
+        letter-spacing: 0.02em;
+      }
+
+      /* Screen Body */
+      .screen-body {
+        display: flex;
+        min-height: 340px;
+        background: var(--bg-screen);
+      }
+
+      /* Mock Sidebar */
+      .sidebar {
+        width: 200px;
+        background: #ffffff;
+        border-right: 1px solid rgba(0,0,0,0.06);
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .brand-badge {
+        background: var(--bg-hero);
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+
+      .brand-title {
+        font-weight: 800;
+        font-size: 0.95rem;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .sidebar-menu li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: all 0.2s ease;
+      }
+
+      .sidebar-menu li:hover {
+        background: rgba(0,0,0,0.03);
+        color: var(--text-dark);
+      }
+
+      .sidebar-menu li.active {
+        background: rgba(189, 244, 146, 0.25);
+        color: var(--text-dark);
+      }
+
+      /* Main Dashboard Panel */
+      .main-panel {
+        flex: 1;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .panel-header h2 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+
+      .date-badge {
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.08);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      /* Metric Grid */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) 1.2fr;
+        gap: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .metric-card {
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.06);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      }
+
+      .metric-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .info-icon {
+        opacity: 0.4;
+        font-size: 0.8rem;
+      }
+
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+
+      .metric-trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 100px;
+      }
+
+      .metric-trend.green-trend {
+        background: #eafbe6;
+        color: var(--accent-green);
+      }
+
+      /* Chart Card Mockup */
+      .chart-card {
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.06);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      .chart-total {
+        color: var(--text-dark);
+        font-weight: 800;
+      }
+
+      .chart-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 60px;
+        margin-top: 12px;
+      }
+
+      .bar {
+        flex: 1;
+        background: var(--text-dark);
+        border-radius: 3px 3px 0 0;
+        min-height: 4px;
+      }
+
+      /* Interactive Search Panel */
+      .search-panel {
+        background: #ffffff;
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 4px 4px 0 var(--border-color);
+      }
+
+      .search-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .search-container input {
+        flex: 1;
+        background: #f8f7f3;
+        border: 1px solid rgba(0,0,0,0.12);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        color: var(--text-dark);
+        outline: none;
+        transition: border 0.2s ease;
+      }
+
+      .search-container input:focus {
+        border-color: var(--border-color);
+      }
+
+      .search-container button {
+        background: var(--text-dark);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.2s ease;
+      }
+
+      .search-container button:hover {
+        transform: translateY(-1px);
+        background: #142e1b;
+      }
+
+      .suggestions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      .tag-btn {
+        background: rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 100px;
+        padding: 4px 10px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .tag-btn:hover {
+        background: var(--bg-hero);
+        border-color: var(--border-color);
+      }
+
+      .status-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--text-muted);
+        display: inline-block;
+      }
+
+      .status-dot.active {
+        background-color: #f59e0b;
+        animation: pulse-dot 1.2s infinite;
+      }
+
+      .status-dot.success {
+        background-color: var(--accent-green);
+      }
+
+      #status {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+
+      /* Shimmer Loader inside Panel */
+      .shimmer-loader {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        padding: 8px;
+      }
+
+      .shimmer-line {
+        height: 12px;
+        width: 100%;
+        background: linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.03) 75%);
+        background-size: 200% 100%;
+        animation: loading-shimmer 1.5s infinite;
+        border-radius: 4px;
+      }
+
+      .shimmer-line:nth-child(2) { width: 85%; }
+      .shimmer-line:nth-child(3) { width: 70%; }
+
+      @keyframes loading-shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      /* Results Container inside Panel */
+      .results-container {
+        display: none;
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.06);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        max-height: 700px;
+        overflow-y: auto;
+      }
+
+      .results-container .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+      }
+
+      .results-container h3 {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-dark);
+      }
+
+      .results-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .action-btn {
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.12);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .action-btn:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .action-btn.close-btn {
+        background: var(--text-dark);
+        color: #ffffff;
+        border-color: var(--border-color);
+      }
+
+      .action-btn.close-btn:hover {
+        background: #142e1b;
+      }
+
+      .output-text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-dark);
+      }
+
+      /* Markdown inner styling */
+      .md-h1, .md-h2, .md-h3, .md-h4, .md-h5, .md-h6 {
+        margin-top: 18px;
+        margin-bottom: 8px;
+        font-weight: 800;
+        color: var(--text-dark);
+      }
+
+      .md-h1 { font-size: 1.25rem; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 4px; }
+      .md-h2 { font-size: 1.15rem; }
+      .md-h3 { font-size: 1.05rem; color: var(--text-muted); }
+      .md-h4 { font-size: 0.98rem; color: var(--text-muted); }
+      .md-h5, .md-h6 { font-size: 0.90rem; color: var(--text-muted); }
+
+      .md-p {
+        margin-bottom: 12px;
+      }
+
+      .md-ul, .md-ol {
+        margin-left: 18px;
+        margin-bottom: 12px;
+      }
+
+      .md-ul { list-style-type: disc; }
+      .md-ol { list-style-type: decimal; }
+
+      .md-ul li, .md-ol li {
+        margin-bottom: 6px;
+      }
+
+      .md-code {
+        font-family: 'Fira Code', monospace;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: #d01760;
+      }
+
+      .md-spacer {
+        height: 10px;
+      }
+
+      strong {
+        color: #2e7d32;
+        font-weight: 700;
+      }
+
+      /* Footer */
+      footer {
+        width: 100%;
+        text-align: center;
+        padding: 40px 20px 0 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        z-index: 10;
+        position: relative;
+      }
+
+      /* Responsive Rules */
+      @media (max-width: 900px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        .nav-center {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero-title {
+          font-size: 2rem;
+        }
+        .hero-actions {
+          flex-direction: column;
+          width: 100%;
+          max-width: 300px;
+        }
+        .btn-primary, .btn-secondary {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <span class="logo-box">Herb</span>
+            <span class="logo-text">Research</span>
+          </div>
+        </a>
+      </div>
+      <div class="nav-center">
+        <a href="/how-we-roll">How we Roll</a>
+        <a href="/services">Our Services</a>
+        <a href="/community">Our Community</a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-btn" onclick="scrollToApp()">Get Started ↗</button>
+      </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <section class="hero">
+      <h1 class="hero-title">
+        THE ONLY <span class="badge-word">AI RESEARCH</span> <span class="badge-word">HUB</span> YOU'LL EVER NEED.
+      </h1>
+      <p class="hero-subtitle">
+        Made by research experts who really get the business. Find expert-crafted, results-driven, tailored insights that get your project lifted.
+      </p>
+      <!-- <div class="hero-actions">
+        <button class="btn-primary" onclick="focusInput()">Get Started ↗</button>
+        <button class="btn-secondary" onclick="scrollToApp()">Learn More ↗</button>
+      </div> -->
+
+      <!-- Bezel Device Mockup -->
+      <div class="device-mockup" id="app-container">
+        <!-- Bezel top browser-bar -->
+        <div class="device-header">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="address-bar">https://assistant.herb.agency/app</div>
+          <div style="width: 42px;"></div> <!-- visual spacer -->
+        </div>
+
+        <!-- Dashboard Inside Screen -->
+        <div class="screen-body">
+          <!-- Sidebar -->
+          <!-- <aside class="sidebar">
+            <div class="sidebar-brand">
+              <span class="brand-badge">Herb</span>
+              <span class="brand-title">Agency</span>
+            </div>
+            <ul class="sidebar-menu">
+              <li class="active" onclick="showDashboard()">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">Overview</span>
+              </li>
+              <li>
+                <span class="menu-icon">👤</span>
+                <span class="menu-text">Contacts</span>
+              </li>
+              <li>
+                <span class="menu-icon">🔌</span>
+                <span class="menu-text">Integrations</span>
+              </li>
+              <li>
+                <span class="menu-icon">🔔</span>
+                <span class="menu-text">Notifications</span>
+              </li>
+              <li>
+                <span class="menu-icon">🌐</span>
+                <span class="menu-text">Open website</span>
+              </li>
+            </ul>
+          </aside> -->
+
+          <!-- Main Panel -->
+          <div class="main-panel">
+            <div class="panel-header">
+              <h2>Research</h2>
+              <div class="date-badge">June 2026</div>
+            </div>
+
+            <!-- Dashboard default metrics -->
+            <!-- <div id="dashboard-view" class="dashboard-grid">
+              <div class="metric-card">
+                <div class="metric-title">Total Income <span class="info-icon">ℹ️</span></div>
+                <div class="metric-value">$234.98K</div>
+                <div class="metric-trend green-trend">
+                  <span class="arrow">↑</span> 234.45%
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-title">Resolved Identities <span class="info-icon">ℹ️</span></div>
+                <div class="metric-value">3,639</div>
+                <div class="metric-trend green-trend">
+                  <span class="arrow">↑</span> 234.45%
+                </div>
+              </div>
+
+              <div class="chart-card">
+                <div class="chart-header">
+                  <span>Resolved Identities</span>
+                  <span class="chart-total">12K+</span>
+                </div>
+                <div class="chart-bars">
+                  <div class="bar" style="height: 30%"></div>
+                  <div class="bar" style="height: 50%"></div>
+                  <div class="bar" style="height: 70%"></div>
+                  <div class="bar" style="height: 90%"></div>
+                  <div class="bar" style="height: 60%"></div>
+                  <div class="bar" style="height: 40%"></div>
+                  <div class="bar" style="height: 80%"></div>
+                </div>
+              </div>
+            </div> -->
+
+            <!-- Search Console Input -->
+            <div class="search-panel">
+              <div class="search-container">
+                <input 
+                  type="text" 
+                  id="topic" 
+                  placeholder="What would you like to research today?" 
+                  autocomplete="off"
+                />
+                <button id="research-btn" onclick="research()">
+                  <span>Analyze</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+              
+              <!-- Suggestions list -->
+              <div class="suggestions">
+                <span>Suggested:</span>
+                <button class="tag-btn" onclick="setTopic('Cannabis Marketing')">Cannabis Marketing</button>
+                <button class="tag-btn" onclick="setTopic('Organic Search Strategy')">SEO Strategy</button>
+                <button class="tag-btn" onclick="setTopic('Aesthetics in Web Design')">UI Aesthetics</button>
+              </div>
+
+              <!-- Status line -->
+              <div class="status-bar">
+                <span id="status-dot" class="status-dot"></span>
+                <span id="status">Ready to analyze.</span>
+              </div>
+            </div>
+
+            <!-- Loader skeleton -->
+            <div id="shimmer-loader" class="shimmer-loader">
+              <div class="shimmer-line"></div>
+              <div class="shimmer-line"></div>
+              <div class="shimmer-line"></div>
+            </div>
+
+            <!-- Results container -->
+            <div id="results-view" class="results-container">
+              <div class="results-header">
+                <h3>Research Summary</h3>
+                <div class="results-actions">
+                  <button class="action-btn" id="copy-btn" onclick="copyResult()">Copy</button>
+                  <button class="action-btn close-btn" onclick="showDashboard()">Dashboard</button>
+                </div>
+              </div>
+              <article id="output" class="output-text"></article>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagonal wave split -->
+    <div class="bottom-split"></div>
+
+    <footer>
+      <p>&copy; 2026 Egregor Studio. Built for Adapting Minds.</p>
+    </footer>
+
+    <script>
+      let rawText = "";
+
+      function scrollToApp() {
+        document.getElementById("app-container").scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function focusInput() {
+        scrollToApp();
+        setTimeout(() => {
+          document.getElementById("topic").focus();
+        }, 600);
+      }
+
+      function setTopic(val) {
+        document.getElementById("topic").value = val;
+        research();
+      }
+
+      function showDashboard() {
+        document.getElementById("results-view").style.display = "none";
+        const dbView = document.getElementById("dashboard-view");
+        if (dbView) dbView.style.display = "grid";
+        document.getElementById("status-dot").className = "status-dot";
+        document.getElementById("status").textContent = "Ready to analyze.";
+      }
+
+      async function copyResult() {
+        const btn = document.getElementById("copy-btn");
+        const originalText = btn.innerHTML;
+        try {
+          await navigator.clipboard.writeText(rawText);
+          btn.innerHTML = "Copied!";
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+          }, 2000);
+        } catch (err) {
+          console.error("Failed to copy: ", err);
+        }
+      }
+
+      function parseMarkdown(md) {
+        const lines = md.split('\n');
+        let html = '';
+        let inList = false;
+        let inOList = false;
+
+        for (let line of lines) {
+          let trimmed = line.trim();
+          
+          const isBullet = trimmed.startsWith('- ') || trimmed.startsWith('* ');
+          const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+          const isNumbered = !!numMatch;
+
+          if (isBullet) {
+            if (inOList) {
+              html += '</ol>';
+              inOList = false;
+            }
+            if (!inList) {
+              html += '<ul class="md-ul">';
+              inList = true;
+            }
+            const content = trimmed.substring(2);
+            html += `<li>${parseInlineMarkdown(content)}</li>`;
+          } else if (isNumbered) {
+            if (inList) {
+              html += '</ul>';
+              inList = false;
+            }
+            if (!inOList) {
+              html += '<ol class="md-ol">';
+              inOList = true;
+            }
+            const content = numMatch[2];
+            html += `<li>${parseInlineMarkdown(content)}</li>`;
+          } else if (trimmed === '') {
+            if (!inList && !inOList) {
+              html += '<div class="md-spacer"></div>';
+            }
+          } else {
+            if (inList) {
+              html += '</ul>';
+              inList = false;
+            }
+            if (inOList) {
+              html += '</ol>';
+              inOList = false;
+            }
+
+            if (trimmed.startsWith('#')) {
+              let hCount = 0;
+              while (hCount < trimmed.length && trimmed[hCount] === '#') {
+                hCount++;
+              }
+              if (hCount > 0 && hCount <= 6 && trimmed[hCount] === ' ') {
+                const content = trimmed.substring(hCount + 1);
+                html += `<h${hCount} class="md-h${hCount}">${parseInlineMarkdown(content)}</h${hCount}>`;
+                continue;
+              }
+            }
+
+            html += `<p class="md-p">${parseInlineMarkdown(trimmed)}</p>`;
+          }
+        }
+        if (inList) html += '</ul>';
+        if (inOList) html += '</ol>';
+        return html;
+      }
+
+      function parseInlineMarkdown(text) {
+        let html = text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+          
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/`(.*?)`/g, '<code class="md-code">$1</code>');
+        return html;
+      }
+
+      async function research() {
+        const topicInput = document.getElementById("topic");
+        const topic = topicInput.value.trim();
+        if (!topic) return;
+
+        const output = document.getElementById("output");
+        const status = document.getElementById("status");
+        const statusDot = document.getElementById("status-dot");
+        const resultsView = document.getElementById("results-view");
+        const dashboardView = document.getElementById("dashboard-view");
+        const shimmerLoader = document.getElementById("shimmer-loader");
+        const researchBtn = document.getElementById("research-btn");
+
+        scrollToApp();
+
+        // UI Reset
+        rawText = "";
+        output.innerHTML = "";
+        if (dashboardView) {
+          dashboardView.style.display = "none";
+        }
+        resultsView.style.display = "none";
+        shimmerLoader.style.display = "flex";
+        
+        status.textContent = "Connecting to agent...";
+        statusDot.className = "status-dot active";
+        researchBtn.disabled = true;
+
+        try {
+          const response = await fetch("/research", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch research: ${response.statusText}`);
+          }
+
+          status.textContent = "Analyzing & compiling research...";
+          
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+              status.textContent = "Done!";
+              statusDot.className = "status-dot success";
+              break;
+            }
+
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split("\n\n");
+            buffer = lines.pop() || "";
+
+            let finished = false;
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const dataStr = line.slice(6).trim();
+                if (dataStr === "[DONE]") {
+                  finished = true;
+                  break;
+                }
+                try {
+                  const msg = JSON.parse(dataStr);
+                  if (msg.content) {
+                    if (shimmerLoader.style.display !== "none") {
+                      shimmerLoader.style.display = "none";
+                      resultsView.style.display = "block";
+                    }
+                    rawText += msg.content;
+                    output.innerHTML = parseMarkdown(rawText);
+                    resultsView.scrollTop = resultsView.scrollHeight;
+                  }
+                } catch (e) {
+                  console.error("Error parsing JSON:", e);
+                }
+              }
+            }
+            if (finished) {
+              status.textContent = "Done!";
+              statusDot.className = "status-dot success";
+              break;
+            }
+          }
+        } catch (err) {
+          console.error(err);
+          status.textContent = `Error: ${err.message}`;
+          statusDot.className = "status-dot";
+          statusDot.style.backgroundColor = "#ef4444";
+          shimmerLoader.style.display = "none";
+        } finally {
+          researchBtn.disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Services — Herb Agency</title>
+    <meta name="description" content="Explore Herb Agency's AI-powered business research and HR tools." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      /* Reuse design system */
+      :root {
+        --bg-hero: #bdf492;
+        --bg-dark: #0c1e12;
+        --bg-panel: #ffffff;
+        --bg-screen: #f8f7f3;
+        --text-dark: #0c1e12;
+        --text-muted: #5e6b60;
+        --border-color: #0c1e12;
+        --accent-green: #2e7d32;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-hero);
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 80px;
+        position: relative;
+      }
+      .top-nav {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 20px;
+        z-index: 100;
+      }
+      .nav-left .nav-logo { display: flex; align-items: center; gap: 8px; }
+      .logo-box { background: var(--text-dark); color: var(--bg-hero); font-weight: 800; font-size: 1.1rem; padding: 6px 12px; border-radius: 6px; letter-spacing: -0.02em; }
+      .logo-text { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--text-dark); }
+      .nav-center { display: flex; gap: 32px; }
+      .nav-center a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: opacity 0.2s ease; }
+      .nav-center a:hover { opacity: 0.75; }
+      .nav-right .nav-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 2px 2px 0 var(--border-color);
+      }
+      .nav-right .nav-btn:hover { transform: translateY(-1px); box-shadow: 3px 3px 0 var(--border-color); }
+      .bottom-split {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 35%;
+        background-color: var(--bg-dark);
+        z-index: 1;
+        clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      }
+      footer {
+        width: 100%;
+        text-align: center;
+        padding: 40px 20px 0 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        z-index: 10;
+        position: relative;
+        margin-top: auto;
+      }
+      
+      /* Content specific styling */
+      .content-container {
+        width: 100%;
+        max-width: 960px;
+        padding: 40px 20px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .page-title {
+        font-size: 3rem;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      .badge-word {
+        background: #ffffff;
+        color: var(--text-dark);
+        padding: 4px 16px;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        display: inline-block;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transform: rotate(-0.5deg);
+      }
+      .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 600px;
+        margin-bottom: 48px;
+        font-weight: 500;
+      }
+      
+      /* Services Grid */
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        width: 100%;
+        margin-bottom: 48px;
+      }
+      .service-card {
+        background: #ffffff;
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 6px 6px 0 var(--border-color);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 24px;
+        position: relative;
+      }
+      .service-card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 9px 9px 0 var(--border-color);
+      }
+      .service-badge {
+        position: absolute;
+        top: -14px;
+        right: 28px;
+        background: var(--bg-dark);
+        color: #ffffff;
+        border: 2px solid var(--border-color);
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .service-icon {
+        font-size: 2.5rem;
+      }
+      .service-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+      .service-desc {
+        font-size: 0.98rem;
+        line-height: 1.6;
+        color: var(--text-muted);
+        flex-grow: 1;
+      }
+      .service-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+      .service-features li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .check-icon {
+        color: var(--accent-green);
+        font-weight: 800;
+      }
+      .card-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transition: all 0.2s ease;
+        text-decoration: none;
+        text-align: center;
+      }
+      .card-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0 var(--border-color);
+        background: var(--bg-hero);
+      }
+      .card-btn.primary-btn {
+        background: var(--text-dark);
+        color: #ffffff;
+      }
+      .card-btn.primary-btn:hover {
+        background: #142e1b;
+        color: #ffffff;
+      }
+
+      @media (max-width: 768px) {
+        .services-grid { grid-template-columns: 1fr; }
+        .page-title { font-size: 2.2rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <span class="logo-box">Herb</span>
+            <span class="logo-text">Research</span>
+          </div>
+        </a>
+      </div>
+      <div class="nav-center">
+        <a href="/how-we-roll">How we Roll</a>
+        <a href="/services" style="font-weight: 800; border-bottom: 2px solid var(--border-color);">Our Services</a>
+        <a href="/community">Our Community</a>
+      </div>
+      <div class="nav-right">
+        <a href="/" class="nav-btn" style="text-decoration: none;">Get Started ↗</a>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content-container">
+      <h1 class="page-title">
+        OUR INTEL <span class="badge-word">SERVICES</span>.
+      </h1>
+      <p class="page-subtitle">
+        We deliver tools that supercharge business research and streamline recruitment workflow with intelligent automation.
+      </p>
+
+      <div class="services-grid">
+        <!-- Service 1: AI Research Assistant -->
+        <div class="service-card">
+          <div class="service-badge">Core Engine</div>
+          <div class="service-icon">🔬</div>
+          <div>
+            <h2 class="service-title" style="margin-bottom: 8px;">AI Research Assistant</h2>
+            <p class="service-desc">
+              Instantly compile thorough, expert-crafted, results-driven research summaries on any topic in real-time.
+            </p>
+          </div>
+          <ul class="service-features">
+            <li><span class="check-icon">✓</span> Real-time streaming output</li>
+            <li><span class="check-icon">✓</span> Automated markdown rendering</li>
+            <li><span class="check-icon">✓</span> Concise structured summaries</li>
+          </ul>
+          <a href="/" class="card-btn primary-btn">Launch Assistant ↗</a>
+        </div>
+
+        <!-- Service 2: HireSense -->
+        <div class="service-card">
+          <div class="service-badge" style="background: var(--bg-hero); color: var(--text-dark);">Featured Project</div>
+          <div class="service-icon">📋</div>
+          <div>
+            <h2 class="service-title" style="margin-bottom: 8px;">HireSense</h2>
+            <p class="service-desc">
+              Our advanced AI JD to Resume Analyzer. Instantly cross-reference candidate profiles against job requirements for exact matchmaking.
+            </p>
+          </div>
+          <ul class="service-features">
+            <li><span class="check-icon">✓</span> Automated resume screening</li>
+            <li><span class="check-icon">✓</span> Exact keyword and skill matching</li>
+            <li><span class="check-icon">✓</span> Score-based rank ordering</li>
+          </ul>
+          <a href="https://xhiresense.netlify.app/" target="_blank" class="card-btn">Try HireSense ↗</a>
+        </div>
+      </div>
+    </main>
+
+    <div class="bottom-split"></div>
+    <footer>
+      <p>&copy; 2026 Egregor Studio. Built for Adapting Minds.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How We Roll — Herb Agency</title>
+    <meta name="description" content="Understand the engineering and intelligence behind our AI research assistant." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      /* Reuse design system */
+      :root {
+        --bg-hero: #bdf492;
+        --bg-dark: #0c1e12;
+        --bg-panel: #ffffff;
+        --bg-screen: #f8f7f3;
+        --text-dark: #0c1e12;
+        --text-muted: #5e6b60;
+        --border-color: #0c1e12;
+        --accent-green: #2e7d32;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-hero);
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 80px;
+        position: relative;
+      }
+      .top-nav {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 20px;
+        z-index: 100;
+      }
+      .nav-left .nav-logo { display: flex; align-items: center; gap: 8px; }
+      .logo-box { background: var(--text-dark); color: var(--bg-hero); font-weight: 800; font-size: 1.1rem; padding: 6px 12px; border-radius: 6px; letter-spacing: -0.02em; }
+      .logo-text { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--text-dark); }
+      .nav-center { display: flex; gap: 32px; }
+      .nav-center a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: opacity 0.2s ease; }
+      .nav-center a:hover { opacity: 0.75; }
+      .nav-right .nav-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 2px 2px 0 var(--border-color);
+      }
+      .nav-right .nav-btn:hover { transform: translateY(-1px); box-shadow: 3px 3px 0 var(--border-color); }
+      .bottom-split {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 35%;
+        background-color: var(--bg-dark);
+        z-index: 1;
+        clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      }
+      footer {
+        width: 100%;
+        text-align: center;
+        padding: 40px 20px 0 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        z-index: 10;
+        position: relative;
+        margin-top: auto;
+      }
+      
+      /* Content specific styling */
+      .content-container {
+        width: 100%;
+        max-width: 960px;
+        padding: 40px 20px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .page-title {
+        font-size: 3rem;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      .badge-word {
+        background: #ffffff;
+        color: var(--text-dark);
+        padding: 4px 16px;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        display: inline-block;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transform: rotate(-0.5deg);
+      }
+      .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 600px;
+        margin-bottom: 48px;
+        font-weight: 500;
+      }
+      
+      /* Step Grid */
+      .step-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        width: 100%;
+        margin-bottom: 48px;
+      }
+      .step-card {
+        background: #ffffff;
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 6px 6px 0 var(--border-color);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .step-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px 0 var(--border-color);
+      }
+      .step-num {
+        background: var(--bg-hero);
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1rem;
+        box-shadow: 2px 2px 0 var(--border-color);
+      }
+      .step-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+      .step-desc {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text-muted);
+      }
+      .cta-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 12px;
+      }
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0 var(--border-color);
+      }
+
+      @media (max-width: 768px) {
+        .step-grid { grid-template-columns: 1fr; }
+        .page-title { font-size: 2.2rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <span class="logo-box">Herb</span>
+            <span class="logo-text">Research</span>
+          </div>
+        </a>
+      </div>
+      <div class="nav-center">
+        <a href="/how-we-roll" style="font-weight: 800; border-bottom: 2px solid var(--border-color);">How we Roll</a>
+        <a href="/services">Our Services</a>
+        <a href="/community">Our Community</a>
+      </div>
+      <div class="nav-right">
+        <a href="/" class="nav-btn" style="text-decoration: none;">Get Started ↗</a>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content-container">
+      <h1 class="page-title">
+        HOW THE <span class="badge-word">AI RESEARCHER</span> WORKS.
+      </h1>
+      <p class="page-subtitle">
+        We've engineered a sophisticated pipeline combining deep prompt models and stream compilation to deliver instant, expert-level reports.
+      </p>
+
+      <div class="step-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h2 class="step-title">Query Processing</h2>
+          <p class="step-desc">
+            Your research topic is analyzed instantly to extract core search entities, target industries, and domain knowledge definitions.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h2 class="step-title">Context Orchestration</h2>
+          <p class="step-desc">
+            We structure complex directives into modern models, asking the system to outline concepts, future applications, and industry trends.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h2 class="step-title">Real-Time Streaming</h2>
+          <p class="step-desc">
+            Instead of waiting minutes, the report streams to your screen line-by-line, dynamically rendering formatting markdown on-the-fly.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <h2 class="step-title">Dynamic Sizing & Layout</h2>
+          <p class="step-desc">
+            The results container resizes automatically to fit the streamed text, limiting growth at a structured height to keep the console clean and scrollable.
+          </p>
+        </div>
+      </div>
+
+      <a href="/" class="cta-btn">Start a Research Topic ↗</a>
+    </main>
+
+    <div class="bottom-split"></div>
+    <footer>
+      <p>&copy; 2026 Egregor Studio. Built for Adapting Minds.</p>
+    </footer>
+  </body>
+</html>

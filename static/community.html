@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Community — Herb Agency</title>
+    <meta name="description" content="Read reviews and testimonials from the Herb Agency research community." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      /* Reuse design system */
+      :root {
+        --bg-hero: #bdf492;
+        --bg-dark: #0c1e12;
+        --bg-panel: #ffffff;
+        --bg-screen: #f8f7f3;
+        --text-dark: #0c1e12;
+        --text-muted: #5e6b60;
+        --border-color: #0c1e12;
+        --accent-green: #2e7d32;
+        --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-hero);
+        color: var(--text-dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 80px;
+        position: relative;
+      }
+      .top-nav {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 20px;
+        z-index: 100;
+      }
+      .nav-left .nav-logo { display: flex; align-items: center; gap: 8px; }
+      .logo-box { background: var(--text-dark); color: var(--bg-hero); font-weight: 800; font-size: 1.1rem; padding: 6px 12px; border-radius: 6px; letter-spacing: -0.02em; }
+      .logo-text { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; color: var(--text-dark); }
+      .nav-center { display: flex; gap: 32px; }
+      .nav-center a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: opacity 0.2s ease; }
+      .nav-center a:hover { opacity: 0.75; }
+      .nav-right .nav-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 2px 2px 0 var(--border-color);
+      }
+      .nav-right .nav-btn:hover { transform: translateY(-1px); box-shadow: 3px 3px 0 var(--border-color); }
+      .bottom-split {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 35%;
+        background-color: var(--bg-dark);
+        z-index: 1;
+        clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      }
+      footer {
+        width: 100%;
+        text-align: center;
+        padding: 40px 20px 0 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        z-index: 10;
+        position: relative;
+        margin-top: auto;
+      }
+      
+      /* Content specific styling */
+      .content-container {
+        width: 100%;
+        max-width: 960px;
+        padding: 40px 20px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .page-title {
+        font-size: 3rem;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      .badge-word {
+        background: #ffffff;
+        color: var(--text-dark);
+        padding: 4px 16px;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        display: inline-block;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transform: rotate(-0.5deg);
+      }
+      .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 600px;
+        margin-bottom: 48px;
+        font-weight: 500;
+      }
+      
+      /* Reviews Grid */
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        width: 100%;
+        margin-bottom: 48px;
+      }
+      .review-card {
+        background: #ffffff;
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .review-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--border-color);
+      }
+      .stars {
+        color: #f59e0b; /* Nice gold star color */
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+      }
+      .review-text {
+        font-size: 0.92rem;
+        line-height: 1.5;
+        color: var(--text-dark);
+        font-style: italic;
+        flex-grow: 1;
+      }
+      .reviewer-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        padding-top: 14px;
+      }
+      .reviewer-avatar {
+        background: var(--bg-hero);
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+      .reviewer-details {
+        display: flex;
+        flex-direction: column;
+      }
+      .reviewer-name {
+        font-weight: 800;
+        font-size: 0.88rem;
+      }
+      .reviewer-title {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+      .cta-btn {
+        background: #ffffff;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+        padding: 14px 28px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 var(--border-color);
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 12px;
+      }
+      .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 5px 5px 0 var(--border-color);
+      }
+
+      @media (max-width: 900px) {
+        .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        .reviews-grid { grid-template-columns: 1fr; }
+        .page-title { font-size: 2.2rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <a href="/" style="text-decoration: none; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <span class="logo-box">Herb</span>
+            <span class="logo-text">Research</span>
+          </div>
+        </a>
+      </div>
+      <div class="nav-center">
+        <a href="/how-we-roll">How we Roll</a>
+        <a href="/services">Our Services</a>
+        <a href="/community" style="font-weight: 800; border-bottom: 2px solid var(--border-color);">Our Community</a>
+      </div>
+      <div class="nav-right">
+        <a href="/" class="nav-btn" style="text-decoration: none;">Get Started ↗</a>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content-container">
+      <h1 class="page-title">
+        COMMUNITY <span class="badge-word">REVIEWS</span>.
+      </h1>
+      <p class="page-subtitle">
+        See how research analysts, marketers, and HR leads are leveraging our AI workspace to deliver high-quality summaries.
+      </p>
+
+      <div class="reviews-grid">
+        <!-- Review 1 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "The dynamic real-time streaming is a absolute game changer. I generated a complete cannabis market overview in less than 30 seconds."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">SL</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">Sarah Jenkins</span>
+              <span class="reviewer-title">Product Director</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "No generic lists or boring templates. The structure of the research summaries matches what expert business analysts would compile."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">DK</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">David K.</span>
+              <span class="reviewer-title">Creative Lead</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "Using HireSense alongside the research assistant has drastically optimized our HR screening pipeline. Amazing tools from Herb Agency."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">MA</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">Marcus Aurelius</span>
+              <span class="reviewer-title">HR Manager</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 4 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "I love the clean neobrutalist aesthetic! The offset borders, bright green colors, and layout look incredibly premium and modern."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">ER</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">Elena Ristova</span>
+              <span class="reviewer-title">Tech Lead</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 5 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "The accuracy of the concepts and definitions section has cut down our industry review phase by days. Truly expert-level."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">TH</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">Tyler H.</span>
+              <span class="reviewer-title">SEO strategist</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 6 -->
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">
+            "We integrated Herb research into our creative pitches. Our clients are always wowed by the depth of insights we bring to meetings."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">AM</div>
+            <div class="reviewer-details">
+              <span class="reviewer-name">Aisha M.</span>
+              <span class="reviewer-title">Marketing VP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="/" class="cta-btn">Join the Community ↗</a>
+    </main>
+
+    <div class="bottom-split"></div>
+    <footer>
+      <p>&copy; 2026 Egregor Studio. Built for Adapting Minds.</p>
+    </footer>
+  </body>
+</html>
