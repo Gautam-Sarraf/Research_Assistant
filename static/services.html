@@ -127,7 +127,7 @@
       /* Services Grid */
       .services-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 32px;
         width: 100%;
         margin-bottom: 48px;
@@ -223,7 +223,10 @@
         color: #ffffff;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 960px) {
+        .services-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 640px) {
         .services-grid { grid-template-columns: 1fr; }
         .page-title { font-size: 2.2rem; }
       }
@@ -394,6 +397,24 @@
             <li><span class="check-icon">✓</span> Score-based rank ordering</li>
           </ul>
           <a href="https://xhiresense.netlify.app/" target="_blank" class="card-btn">Try HireSense ↗</a>
+        </div>
+
+        <!-- Service 3: AI Chatbot -->
+        <div class="service-card">
+          <div class="service-badge" style="background: var(--accent-green); color: #ffffff;">Interactive</div>
+          <div class="service-icon">💬</div>
+          <div>
+            <h2 class="service-title" style="margin-bottom: 8px;">AI Chatbot</h2>
+            <p class="service-desc">
+              Engage in interactive, real-time conversations with our intelligent chat assistant, featuring session memory and state preservation.
+            </p>
+          </div>
+          <ul class="service-features">
+            <li><span class="check-icon">✓</span> Real-time conversational AI</li>
+            <li><span class="check-icon">✓</span> Persistent session history</li>
+            <li><span class="check-icon">✓</span> Fast and responsive interface</li>
+          </ul>
+          <a href="https://web-chatbot-8w8c.onrender.com/" target="_blank" class="card-btn">Try Chatbot ↗</a>
         </div>
       </div>
     </main>
