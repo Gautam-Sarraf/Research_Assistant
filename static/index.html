@@ -263,6 +263,13 @@
         border-radius: 6px;
         font-family: monospace;
         letter-spacing: 0.02em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .header-spacer {
+        width: 42px;
       }
 
       /* Screen Body */
@@ -830,13 +837,47 @@
         }
       }
 
+      @media (max-width: 640px) {
+        .address-bar {
+          padding: 4px 16px;
+          max-width: 180px;
+        }
+        .header-spacer {
+          display: none;
+        }
+        .device-header {
+          padding: 10px 12px;
+        }
+        .search-container {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .search-container button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
       @media (max-width: 480px) {
         .main-panel {
           padding: 16px;
+          min-width: 0;
         }
         .device-mockup {
           border-width: 8px;
           border-radius: 16px;
+        }
+        .address-bar {
+          max-width: 140px;
+        }
+        .results-container .results-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .results-actions {
+          width: 100%;
+          justify-content: space-between;
         }
       }
     </style>
@@ -905,7 +946,7 @@
             <span class="dot green"></span>
           </div>
           <div class="address-bar">https://assistant.herb.agency/app</div>
-          <div style="width: 42px;"></div> <!-- visual spacer -->
+          <div class="header-spacer"></div> <!-- visual spacer -->
         </div>
 
         <!-- Dashboard Inside Screen -->
